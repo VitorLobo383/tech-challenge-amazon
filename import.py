@@ -48,6 +48,10 @@ df["discount_percentage"] = pd.to_numeric(df["discount_percentage"], errors="coe
 
 #%%
 
+df.head()
+
+#%%
+
 df["rating_count"] = df["rating_count"].str.replace(',','')
 #%%
 
@@ -62,17 +66,18 @@ df["rating_count"] = pd.to_numeric(df["rating_count"], errors='coerce')
 
 df.isna().sum()
 
-#%%
-df.info()
+
+#%% 
+
+df_2 = df.dropna()
 
 #%%
 
-from sqlalchemy import create_engine
+df_2.isna().sum()
 
-engine = create_engine("sqlite:///meubanco.db")
-
-print("Engine criada com sucesso!")
-
-df.to_sql("amazon_products", con=engine, if_exists="replace", index=False)
+df_2.duplicated().sum()
 
 
+#%%
+
+df_2.to_csv(path_or_buf="C:/Users/vitor/amazon_tech_challenge/data")
