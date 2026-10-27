@@ -80,4 +80,4 @@ df_2.duplicated().sum()
 
 #%%
 
-df_2.to_csv(path_or_buf="C:/Users/vitor/amazon_tech_challenge/data")
+df_2.to_csv("data/amazon_normalize.csv", index=False)
