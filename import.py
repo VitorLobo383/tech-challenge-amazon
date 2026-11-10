@@ -36,6 +36,13 @@ df[colunas_preco] = df[colunas_preco] * cotacao_inr_brl
 print("\nPreços convertidos para Real (R$):")
 print(df[colunas_preco].head())
 
+
+#%%
+
+df["actual_price"] = round(df["actual_price"], 2)
+df["discounted_price"] = round(df["discounted_price"], 2)
+
+df.head()
 #%%
 #normalizando a coluna porcentagem, deixando como valor númerico
 
@@ -80,4 +87,4 @@ df_2.duplicated().sum()
 
 #%%
 
-df_2.to_csv("data/amazon_normalize.csv", index=False)
+df_2.to_excel("data/amazon_normalize2.xlsx", index=False)
