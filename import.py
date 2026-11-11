@@ -72,19 +72,57 @@ df["rating_count"] = pd.to_numeric(df["rating_count"], errors='coerce')
 #%%
 
 df.isna().sum()
-
-
-#%% 
-
 df_2 = df.dropna()
 
 #%%
 
-df_2.isna().sum()
+df_2["product_id"].duplicated().sum()
 
-df_2.duplicated().sum()
+#%%
+
+df_3 = df_2.drop_duplicates("product_id")
+
+#%%
+
+df_3
+
+#%%
+
+df_3["category_1"] = df_3["category"].str.split("|").str[0]
+df_3["category_2"] = df_3["category"].str.split("|").str[1]
+
+#%%
+df_4 = (df_3.groupby("category_2")
+           .agg(qtd_produtos=("product_id", "count"),
+                total_avaliacoes=("rating_count", "sum"),
+                nota_media=("rating", "mean"))
+           .sort_values("total_avaliacoes", ascending=False))
+
+df_4["pct_total"] = df_4["total_avaliacoes"] / df_4["total_avaliacoes"].sum()
+
+#%%
+
+df_4 = df_4.reset_index()
+
+
+df_5 = df_4.head(8)
+
+#%%
+
+df_5.to_excel("data/amazon_q1.xlsx", index=False)
+
 
 
 #%%
 
-df_2.to_excel("data/amazon_normalize2.xlsx", index=False)
+df_prod = (df_3[["product_id", "product_name", "category_2", "rating", "rating_count"]]
+           .sort_values("rating_count", ascending=False)
+           .reset_index(drop=True))
+
+df_prod["pct_total"] = df_prod["rating_count"] / df_prod["rating_count"].sum()
+
+df_prod.head(10)
+
+#%%
+
+df_prod.head(10).to_excel("data/amazon_q1_prod.xlsx", index=False)
